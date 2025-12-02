@@ -16,8 +16,13 @@ USER_AGENTS = [
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 ]
 
-# Hardcoded API Key (Hidden from UI)
-GEMINI_API_KEY = "AIzaSyDYwJ2WojuQ81W5cCXQU0DtaStq215JXEE"
+# --- SECURE API KEY LOADING ---
+# 1. Try to load from Streamlit Secrets (for deployed apps)
+try:
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+except (AttributeError, KeyError):
+    # 2. Fallback to OS environment variable (for local testing)
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", None)
 
 # Map display names to Amazon URL aliases
 CATEGORIES = {
@@ -513,4 +518,5 @@ if run_btn:
                 st.info("Enable 'Compare with Amazon.co.uk' in the sidebar to see this data.")
 
     else:
+
         st.error("Mission Failed: No products retrieved. Proxies may need cooldown or Captcha block.")
